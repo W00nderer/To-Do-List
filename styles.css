@@ -50,13 +50,48 @@ h1{
 #plan{
   position:absolute;
   border-top: 20px solid black;
-  background-color: #ff7cda;
+  background-color: black;
   width: 100%;
+  display:flex;
+  flex-direction: column;
 }
 h2{
   color: white;
   font-size: 1rem;
   text-align: center;
+  margin: 100px auto;
+}
+
+
+#add-new{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 300px;
+  margin-bottom: 100px;
+  border: 1px solid white;
+  border-radius: 100px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition-property: width, height, border-radius;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+#add-new:hover{
+  background-color: rgb(255,255,255,0.2);
+  cursor: pointer;
+}
+
+#add-new p, #add-new i{
+  font-size: 0.5rem;
+  color: white;
+}
+#add-new p{
+  padding-left: 15px;
+}
+#plus-icon{
+  transition: transform 0.3s ease-in-out;
 }
 
 /*KEY FRAMES*/
@@ -74,7 +109,7 @@ h2{
     width: 100%;
     height: 200px;
     transform: translateY(370px);
-    border-radius: 25% 25% 0 0;
+    border-radius: 70px 70px 0 0;
   }
   to{
     width: 600px;
@@ -93,8 +128,8 @@ h2{
   to{
     width: 100%;
     height: 200px;
+    border-radius: 70px 70px 0 0;
     transform: translateY(370px);
-    border-radius: 25% 25% 0 0;
   }
 }
 @keyframes h1-change {
@@ -117,7 +152,7 @@ h2{
 
 /*MEDIA*/
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 900px) {
   #intro-section{
     width: 450px;
     height: auto;
@@ -139,7 +174,7 @@ h2{
       width: 100%;
       height: 150px;
       transform: translateY(370px);
-      border-radius: 25% 25% 0 0;
+      border-radius: 40px 40px 0 0;
     }
   }
   @keyframes change-back {
@@ -147,7 +182,7 @@ h2{
       width: 100%;
       height: 150px;
       transform: translateY(370px);
-      border-radius: 25% 25% 0 0;
+      border-radius: 40px 40px 0 0;
     }
     to{
       width: 450px;
@@ -167,6 +202,73 @@ h2{
       padding-top: 50px;
       font-size: 0.7rem;
 
+    }
+  }
+}
+
+@media only screen and (max-width:700px) {
+  #intro-section{
+    width: 400px;
+    height: 270px;
+    top:-500px;
+    border-radius: 20% 0 0 35%;
+  }
+  h1{
+    padding: 40px 50px 50px 50px;
+    font-size: 0.8rem;
+  }
+  @keyframes change{
+    from{
+      width: 400px;
+      height: 270px;
+      border-radius: 20% 0 0 35%;
+      transform: translateY(0);
+    }
+    to{
+      width: 100%;
+      height: 125px;
+      transform: translateY(380px);
+      border-radius: 40px 40px 0 0;
+    }
+  }
+  @keyframes change-back {
+    from{
+      width: 100%;
+      height: 125px;
+      transform: translateY(380px);
+      border-radius: 40px 40px 0 0;
+    }
+    to{
+      width: 400px;
+      height: 270px;
+      border-radius: 20% 0 0 35%;
+      transform: translateY(0);
+    }
+  }
+  @keyframes h1-change {
+    from{
+      padding-left: 50px;
+      padding-top: 40px;
+      font-size: 0.8rem;
+    }
+    to{
+      padding-left:40px; 
+      padding-top: 45px;
+      font-size: 0.54rem;
+
+    }
+  }
+  @keyframes h1-change-back {
+    from{
+      padding-left: 40px; 
+      padding-top: 45px;
+      font-size: 0.54rem;
+      
+    }
+    to{
+      padding-left: 50px;
+      padding-top: 40px;
+      font-size: 0.8rem;
     }
   }
 }

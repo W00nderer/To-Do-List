@@ -101,3 +101,56 @@ function moveSection(){
     checkpoint1=0;
   }
 }
+
+//NEW TASK BAR (IN WORK)
+
+const addNewBar = document.getElementById("add-new");
+const plusIcon = document.getElementById("plus-icon");
+
+function addNewTransform() {
+  addNewBar.style.width = '80%';
+  addNewBar.style.height = '80px';
+  addNewBar.style.borderRadius = '10px';
+  plusIcon.style.transform = 'translateX(-450px) rotate(45deg)';
+}
+
+
+// MEDIA QUERIES
+
+
+addNewBar.addEventListener('click', addNewTransform);
+
+const mediaQuery = [
+  window.matchMedia('(max-width: 700px)'),
+  window.matchMedia('(max-width: 900px)')
+];
+
+
+function handleViewportChange(mediaQuery) {
+  if (mediaQuery[0].matches) {
+    addNewBar.removeEventListener('click', addNewTransform);
+    addNewBar.addEventListener('click', function() {
+      addNewBar.style.width = '80%';
+      addNewBar.style.height = '80px';
+      addNewBar.style.borderRadius = '10px';
+      plusIcon.style.transform = 'translateX(-100px) rotate(45deg)';
+    });
+  } else if (mediaQuery[1].matches){
+    addNewBar.removeEventListener('click', addNewTransform);
+    addNewBar.addEventListener('click', function() {
+      addNewBar.style.width = '80%';
+      addNewBar.style.height = '80px';
+      addNewBar.style.borderRadius = '10px';
+      plusIcon.style.transform = 'translateX(-150px) rotate(45deg)';
+    });
+  }
+   else {
+    addNewBar.removeEventListener('click', addNewTransform);
+    addNewBar.addEventListener('click', addNewTransform);
+  }
+}
+
+handleViewportChange(mediaQuery);
+
+mediaQuery.addListener(handleViewportChange);
+

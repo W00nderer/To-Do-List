@@ -106,19 +106,100 @@ function moveSection(){
 
 const addNewBar = document.getElementById("add-new");
 const plusIcon = document.getElementById("plus-icon");
+const taskBar = document.getElementById("task");
+const addNewText = document.getElementById('add-new-text');
+const addIcon = document.getElementById('add-icon');
+let activated = 0;
+const taskList = document.getElementById("task-list");
 
-function addNewTransform() {
+//ADDING TASK FUNCTIONS
+
+
+function addTask(){
+  const div=document.createElement('div');
+  div.className='new-task';
+
+  const paragraph=document.createElement('p');
+  paragraph.innerText=taskBar.value;
+
+
+  const checkboxIcon = document.createElement('i');
+  checkboxIcon.className='fa-regular fa-square';
+
+  taskList.appendChild(div);
+  div.appendChild(checkboxIcon);
+  div.appendChild(paragraph);
+
+  paragraph.style.animation = "task-slide-in .4s ease-in-out forwards";
+  checkboxIcon.style.animation = "task-slide-in .4s ease-in-out forwards";
+}
+
+addIcon.addEventListener('click',addTask);
+
+taskBar.addEventListener("keypress", function(event) {
+  if (event.keyCode === 13) {
+    addTask();
+  }
+});
+
+
+//BUTTON TRANSFORM FUNCTIONS
+
+
+function addNewTransform(){
+  activated=1;
   addNewBar.style.width = '80%';
   addNewBar.style.height = '80px';
   addNewBar.style.borderRadius = '10px';
   plusIcon.style.transform = 'translateX(-450px) rotate(45deg)';
+  addNewText.style.opacity=0;
+  taskBar.style.opacity = 1;
+  taskBar.style.zIndex = 1;
+  plusIcon.removeEventListener('click', addNewTransform);
+  plusIcon.addEventListener('click', backToAdd);
 }
+
+function backToAdd(){
+  activated=0;
+  addNewBar.style.width = '300px';
+  addNewBar.style.height = '100px';
+  addNewBar.style.borderRadius = '100px';
+  plusIcon.style.transform = 'translateX(0px) rotate(-45deg)';
+  addNewText.style.opacity=1;
+  taskBar.style.opacity = 0;
+  taskBar.style.zIndex = -1;
+  addIcon.style.display='none';
+  plusIcon.removeEventListener('click', backToAdd);
+  plusIcon.addEventListener('click', addNewTransform);
+}
+
+
+plusIcon.addEventListener('click', addNewTransform);
+addNewText.addEventListener('click', addNewTransform);
+
+
+
+taskBar.addEventListener('input', function() {
+  if (taskBar.value.trim() !== '') {
+      addIcon.style.display='block';
+  }
+});
+
+addNewBar.addEventListener('mouseover', function() {
+  addNewBar.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+}); 
+
+addNewBar.addEventListener('mouseout', function() {
+  if(activated===0){
+    addNewBar.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+  }else{
+    addNewBar.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+  }
+});
 
 
 // MEDIA QUERIES
 
-
-addNewBar.addEventListener('click', addNewTransform);
 
 const mediaQuery = [
   window.matchMedia('(max-width: 700px)'),
@@ -128,29 +209,49 @@ const mediaQuery = [
 
 function handleViewportChange(mediaQuery) {
   if (mediaQuery[0].matches) {
-    addNewBar.removeEventListener('click', addNewTransform);
-    addNewBar.addEventListener('click', function() {
+    function addNewTransform700(){
+      activated=1;
       addNewBar.style.width = '80%';
       addNewBar.style.height = '80px';
       addNewBar.style.borderRadius = '10px';
       plusIcon.style.transform = 'translateX(-100px) rotate(45deg)';
-    });
+      taskBar.style.width='70%';
+      addNewText.style.opacity=0;
+      taskBar.style.opacity = 1;
+      taskBar.style.zIndex = 1;
+      plusIcon.removeEventListener('click', addNewTransform700);
+      plusIcon.addEventListener('click', backToAdd);
+    }
+    addNewText.removeEventListener('click', addNewTransform);
+    addNewText.addEventListener('click', addNewTransform700);
+    plusIcon.removeEventListener('click', addNewTransform);
+    plusIcon.addEventListener('click', addNewTransform700);
   } else if (mediaQuery[1].matches){
-    addNewBar.removeEventListener('click', addNewTransform);
-    addNewBar.addEventListener('click', function() {
+    function addNewTransform900(){
+      activated=1;
       addNewBar.style.width = '80%';
       addNewBar.style.height = '80px';
       addNewBar.style.borderRadius = '10px';
       plusIcon.style.transform = 'translateX(-150px) rotate(45deg)';
-    });
+      taskBar.style.width='70%';
+      addNewText.style.opacity=0;
+      taskBar.style.opacity = 1;
+      taskBar.style.zIndex = 1;
+      plusIcon.style.marginLeft='-15px';
+      plusIcon.removeEventListener('click', addNewTransform900);
+      plusIcon.addEventListener('click', backToAdd);
+    }
+    addNewText.removeEventListener('click', addNewTransform);
+    addNewText.addEventListener('click', addNewTransform900);
+    plusIcon.removeEventListener('click', addNewTransform);
+    plusIcon.addEventListener('click', addNewTransform900);
   }
    else {
-    addNewBar.removeEventListener('click', addNewTransform);
-    addNewBar.addEventListener('click', addNewTransform);
+    addNewText.addEventListener('click', addNewTransform);
+    plusIcon.addEventListener('click', addNewTransform);
   }
 }
 
 handleViewportChange(mediaQuery);
 
 mediaQuery.addListener(handleViewportChange);
-

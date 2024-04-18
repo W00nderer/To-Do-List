@@ -112,6 +112,13 @@ const addIcon = document.getElementById('add-icon');
 let activated = 0;
 const taskList = document.getElementById("task-list");
 
+const placeholderList=['Buy an island...','Hike mountain Everest...','Get a gold medal...','Travel around the world...','Write a song...','Win a competition...','Go to space...','Help a friend...','Make a new friend...','Start a business...','Drink water...','Have a party...','Buy snacks...'];
+
+function placeholderChoose(){
+  taskBar.placeholder = placeholderList[Math.floor(Math.random() * placeholderList.length)];
+}
+placeholderChoose();
+
 //ADDING TASK FUNCTIONS
 
 
@@ -122,7 +129,6 @@ function addTask(){
   const paragraph=document.createElement('p');
   paragraph.innerText=taskBar.value;
 
-
   const checkboxIcon = document.createElement('i');
   checkboxIcon.className='fa-regular fa-square';
 
@@ -132,6 +138,8 @@ function addTask(){
 
   paragraph.style.animation = "task-slide-in .4s ease-in-out forwards";
   checkboxIcon.style.animation = "task-slide-in .4s ease-in-out forwards";
+  taskBar.value='';
+  placeholderChoose();
 }
 
 addIcon.addEventListener('click',addTask);
@@ -157,6 +165,7 @@ function addNewTransform(){
   taskBar.style.zIndex = 1;
   plusIcon.removeEventListener('click', addNewTransform);
   plusIcon.addEventListener('click', backToAdd);
+  placeholderChoose();
 }
 
 function backToAdd(){
@@ -171,6 +180,9 @@ function backToAdd(){
   addIcon.style.display='none';
   plusIcon.removeEventListener('click', backToAdd);
   plusIcon.addEventListener('click', addNewTransform);
+  taskBar.value='';
+  placeholderChoose();
+
 }
 
 

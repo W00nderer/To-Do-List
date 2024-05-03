@@ -60,7 +60,7 @@ class MetaballEffect{
 }
 
 const effect = new MetaballEffect(canvas.width, canvas.height);
-effect.init(50);
+effect.init(60);
 console.log(effect);
 
 function animate(){
@@ -76,6 +76,7 @@ window.addEventListener('resize', function(){
   canvas.height = window.innerHeight;
   ctx.fillStyle = 'pink';
   effect.reset(canvas.width,canvas.height);
+
 })
 
 
@@ -121,25 +122,38 @@ placeholderChoose();
 
 //ADDING TASK FUNCTIONS
 
+let taskCount=0;
 
 function addTask(){
+  taskCount++;
   const div=document.createElement('div');
-  div.className='new-task';
-
+  div.className='new-task '+ taskCount;
   const paragraph=document.createElement('p');
   paragraph.innerText=taskBar.value;
 
   const checkboxIcon = document.createElement('i');
-  checkboxIcon.className='fa-regular fa-square';
+  checkboxIcon.className='fa-regular fa-square '+ taskCount;
+
+  const trashBin = document.createElement('i');
+  trashBin.className='fa-solid fa-trash fa-2xs ' + taskCount;
+  trashBin.onclick = (function(count) {
+    return function() {
+        deleteTask(count);
+    };
+  })(taskCount);
+
 
   taskList.appendChild(div);
   div.appendChild(checkboxIcon);
   div.appendChild(paragraph);
+  div.appendChild(trashBin);
 
   paragraph.style.animation = "task-slide-in .4s ease-in-out forwards";
   checkboxIcon.style.animation = "task-slide-in .4s ease-in-out forwards";
+  trashBin.style.animation = "task-slide-in .4s ease-in-out forwards";
   taskBar.value='';
   placeholderChoose();
+  addIcon.style.display='none';
 }
 
 addIcon.addEventListener('click',addTask);
@@ -150,16 +164,25 @@ taskBar.addEventListener("keypress", function(event) {
   }
 });
 
+//DELETE TASK
+
+function deleteTask(x){
+  let deletingElement = document.getElementsByClassName(x)[0];
+  if(deletingElement){
+    deletingElement.parentNode.removeChild(deletingElement);
+  }
+}
 
 //BUTTON TRANSFORM FUNCTIONS
 
+const viewportWidth = window.innerWidth;
 
 function addNewTransform(){
   activated=1;
   addNewBar.style.width = '80%';
   addNewBar.style.height = '80px';
   addNewBar.style.borderRadius = '10px';
-  plusIcon.style.transform = 'translateX(-450px) rotate(45deg)';
+  plusIcon.style.transform = 'translateX(-400px) rotate(45deg)';
   addNewText.style.opacity=0;
   taskBar.style.opacity = 1;
   taskBar.style.zIndex = 1;
@@ -173,7 +196,7 @@ function backToAdd(){
   addNewBar.style.width = '300px';
   addNewBar.style.height = '100px';
   addNewBar.style.borderRadius = '100px';
-  plusIcon.style.transform = 'translateX(0px) rotate(-45deg)';
+  plusIcon.style.transform = 'translateX(0px) rotate(90deg)';
   addNewText.style.opacity=1;
   taskBar.style.opacity = 0;
   taskBar.style.zIndex = -1;
@@ -214,7 +237,7 @@ addNewBar.addEventListener('mouseout', function() {
 
 
 const mediaQuery = [
-  window.matchMedia('(max-width: 700px)'),
+  window.matchMedia('(max-width: 600px)'),
   window.matchMedia('(max-width: 900px)')
 ];
 
@@ -226,7 +249,7 @@ function handleViewportChange(mediaQuery) {
       addNewBar.style.width = '80%';
       addNewBar.style.height = '80px';
       addNewBar.style.borderRadius = '10px';
-      plusIcon.style.transform = 'translateX(-100px) rotate(45deg)';
+      plusIcon.style.transform = 'translateX(-80px) rotate(45deg)';
       taskBar.style.width='70%';
       addNewText.style.opacity=0;
       taskBar.style.opacity = 1;
@@ -244,7 +267,7 @@ function handleViewportChange(mediaQuery) {
       addNewBar.style.width = '80%';
       addNewBar.style.height = '80px';
       addNewBar.style.borderRadius = '10px';
-      plusIcon.style.transform = 'translateX(-150px) rotate(45deg)';
+      plusIcon.style.transform = 'translateX(-130px) rotate(45deg)';
       taskBar.style.width='70%';
       addNewText.style.opacity=0;
       taskBar.style.opacity = 1;

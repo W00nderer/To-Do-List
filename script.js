@@ -76,9 +76,7 @@ window.addEventListener('resize', function(){
   canvas.height = window.innerHeight;
   ctx.fillStyle = 'pink';
   effect.reset(canvas.width,canvas.height);
-
 })
-
 
 //MOVING SECTION
 
@@ -126,13 +124,29 @@ let taskCount=0;
 
 function addTask(){
   taskCount++;
+
   const div=document.createElement('div');
   div.className='new-task '+ taskCount;
+  div.setAttribute('id','div'+taskCount);
+  
   const paragraph=document.createElement('p');
   paragraph.innerText=taskBar.value;
+  paragraph.className='task-text '+ taskCount;
+  paragraph.setAttribute('id','p'+taskCount);
 
-  const checkboxIcon = document.createElement('i');
-  checkboxIcon.className='fa-regular fa-square '+ taskCount;
+  const checkedBoxIcon = document.createElement('i');
+  checkedBoxIcon.className='fa-regular fa-square-check '+ taskCount;
+  checkedBoxIcon.setAttribute('id','square-check'+ taskCount);
+
+
+  const boxIcon = document.createElement('i');
+  boxIcon.className='fa-regular fa-square '+ taskCount;
+  boxIcon.setAttribute('id','square'+taskCount);
+  boxIcon.onclick = (function(count){
+    return function() {
+      completeTask(count);
+    };
+  })(taskCount);
 
   const trashBin = document.createElement('i');
   trashBin.className='fa-solid fa-trash fa-2xs ' + taskCount;
@@ -143,17 +157,18 @@ function addTask(){
   })(taskCount);
 
 
-  taskList.appendChild(div);
-  div.appendChild(checkboxIcon);
+  div.appendChild(checkedBoxIcon);
+  div.appendChild(boxIcon);
   div.appendChild(paragraph);
   div.appendChild(trashBin);
+  taskList.appendChild(div);
 
-  paragraph.style.animation = "task-slide-in .4s ease-in-out forwards";
-  checkboxIcon.style.animation = "task-slide-in .4s ease-in-out forwards";
-  trashBin.style.animation = "task-slide-in .4s ease-in-out forwards";
+
+  div.style.animation = "task-slide-in .4s ease-in-out forwards";
   taskBar.value='';
   placeholderChoose();
   addIcon.style.display='none';
+  
 }
 
 addIcon.addEventListener('click',addTask);
@@ -163,6 +178,23 @@ taskBar.addEventListener("keypress", function(event) {
     addTask();
   }
 });
+
+
+//COMPLETE TASK
+
+function completeTask(x){
+  const completedTaskDiv = document.getElementById('div'+ x);
+  const completedTaskText = document.getElementById('p' + x);
+  const checkBox = document.getElementById('square-check' + x);
+  const justBox = document.getElementById('square' + x);
+  if(completedTaskDiv){
+    completedTaskDiv.style.animation= "complete .4s ease-in-out forwards";
+    completedTaskText.style.animation = "text-cross .4s ease-in-out forwards";
+    checkBox.style.animation = "check-appear .4s ease-in-out forwards";
+    justBox.style.animation = "box-disappear .4s ease-in-out forwards";
+    console.log('Complete Task Function Called');
+  }
+}
 
 //DELETE TASK
 
@@ -175,21 +207,30 @@ function deleteTask(x){
 
 //BUTTON TRANSFORM FUNCTIONS
 
-const viewportWidth = window.innerWidth;
+let viewportWidth = window.innerWidth;
 
 function addNewTransform(){
   activated=1;
   addNewBar.style.width = '80%';
   addNewBar.style.height = '80px';
   addNewBar.style.borderRadius = '10px';
-  plusIcon.style.transform = 'translateX(-400px) rotate(45deg)';
+  let distance = (60+(Math.floor((window.innerWidth-500)*0.37)))*(-1);
+  let movePlusIcon = distance + 'px';
+  plusIcon.style.transform = 'translateX(' + movePlusIcon + ') rotate(45deg)';
   addNewText.style.opacity=0;
   taskBar.style.opacity = 1;
   taskBar.style.zIndex = 1;
   plusIcon.removeEventListener('click', addNewTransform);
   plusIcon.addEventListener('click', backToAdd);
   placeholderChoose();
+  window.addEventListener('resize', function() {
+    viewportWidth = window.innerWidth;
+    let distance = (60 + (Math.floor((window.innerWidth - 500) * 0.37))) * (-1);
+    let movePlusIcon = distance + 'px';
+    plusIcon.style.transform = 'translateX(' + movePlusIcon + ') rotate(45deg)';
+  });
 }
+
 
 function backToAdd(){
   activated=0;
@@ -232,61 +273,3 @@ addNewBar.addEventListener('mouseout', function() {
   }
 });
 
-
-// MEDIA QUERIES
-
-
-const mediaQuery = [
-  window.matchMedia('(max-width: 600px)'),
-  window.matchMedia('(max-width: 900px)')
-];
-
-
-function handleViewportChange(mediaQuery) {
-  if (mediaQuery[0].matches) {
-    function addNewTransform700(){
-      activated=1;
-      addNewBar.style.width = '80%';
-      addNewBar.style.height = '80px';
-      addNewBar.style.borderRadius = '10px';
-      plusIcon.style.transform = 'translateX(-80px) rotate(45deg)';
-      taskBar.style.width='70%';
-      addNewText.style.opacity=0;
-      taskBar.style.opacity = 1;
-      taskBar.style.zIndex = 1;
-      plusIcon.removeEventListener('click', addNewTransform700);
-      plusIcon.addEventListener('click', backToAdd);
-    }
-    addNewText.removeEventListener('click', addNewTransform);
-    addNewText.addEventListener('click', addNewTransform700);
-    plusIcon.removeEventListener('click', addNewTransform);
-    plusIcon.addEventListener('click', addNewTransform700);
-  } else if (mediaQuery[1].matches){
-    function addNewTransform900(){
-      activated=1;
-      addNewBar.style.width = '80%';
-      addNewBar.style.height = '80px';
-      addNewBar.style.borderRadius = '10px';
-      plusIcon.style.transform = 'translateX(-130px) rotate(45deg)';
-      taskBar.style.width='70%';
-      addNewText.style.opacity=0;
-      taskBar.style.opacity = 1;
-      taskBar.style.zIndex = 1;
-      plusIcon.style.marginLeft='-15px';
-      plusIcon.removeEventListener('click', addNewTransform900);
-      plusIcon.addEventListener('click', backToAdd);
-    }
-    addNewText.removeEventListener('click', addNewTransform);
-    addNewText.addEventListener('click', addNewTransform900);
-    plusIcon.removeEventListener('click', addNewTransform);
-    plusIcon.addEventListener('click', addNewTransform900);
-  }
-   else {
-    addNewText.addEventListener('click', addNewTransform);
-    plusIcon.addEventListener('click', addNewTransform);
-  }
-}
-
-handleViewportChange(mediaQuery);
-
-mediaQuery.addListener(handleViewportChange);

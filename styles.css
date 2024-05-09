@@ -143,23 +143,37 @@ h2{
   cursor: pointer;
 }
 
+/*ADDED TASK*/
+
+.fa-square-check{
+  position:relative;
+  left: 17px;
+  color: transparent;
+  transform: rotate(180deg);
+}
+
 .fa-square{
-  padding-right: 10px;
+  position: relative;
+  z-index: 1;
+  left: -10px;
+  display: inline-block;
 }
 
 .fa-trash{
   padding-left: 10px;
 }
+
 .new-task{
   display:flex;
   margin: 0 auto;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 80%;
   height: auto;
-  flex-direction: row;
 }
+
+
 
 /*KEY FRAMES*/
 
@@ -180,6 +194,50 @@ h2{
   }
 }
 
+@keyframes complete {
+  from{
+    color: white;
+    transform: translateY(-20px);
+    margin-top: 10px;
+    font-size: 0.5rem;
+  }
+  to{
+    transform: translateY(-20px);
+    margin-top: 10px;
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.349);
+  }
+}
+
+@keyframes text-cross {
+  from{
+    text-decoration: none;
+  }
+  to{
+    text-decoration: line-through;
+  }
+}
+
+@keyframes check-appear {
+  from{
+    color: transparent;
+    transform: rotate(180deg);
+  }
+  to{
+    color: rgba(255, 255, 255, 0.349);
+    transform: rotate(360deg);
+  }
+}
+@keyframes box-disappear{
+  from{
+    color: white;
+    transform: rotate(0deg);
+  }
+  to{
+    color: transparent;
+    transform: rotate(180deg);
+  }
+}
 @keyframes change{
   from{
     width: 600px;

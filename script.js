@@ -246,7 +246,10 @@ function backToAdd(){
   plusIcon.addEventListener('click', addNewTransform);
   taskBar.value='';
   placeholderChoose();
-
+  window.addEventListener('resize', function() {
+    viewportWidth = window.innerWidth;
+    plusIcon.style.transform = 'translateX(0px) rotate(90deg)';
+  });
 }
 
 

@@ -103,6 +103,8 @@ function moveSection(){
 
 //NEW TASK BAR (IN WORK)
 
+let viewportWidth = window.innerWidth;
+
 const addNewBar = document.getElementById("add-new");
 const plusIcon = document.getElementById("plus-icon");
 const taskBar = document.getElementById("task");
@@ -110,6 +112,33 @@ const addNewText = document.getElementById('add-new-text');
 const addIcon = document.getElementById('add-icon');
 let activated = 0;
 const taskList = document.getElementById("task-list");
+
+// MAXIMUM LENGTH OF TASK
+
+function adjustMaxLength() {
+  const maxChar = Math.floor((viewportWidth / 100) * 4 - 3);
+  if (maxChar < 1) {
+    taskBar.setAttribute('maxlength', 1);
+  } else {
+    taskBar.setAttribute('maxlength', maxChar);
+  }
+  console.log(maxChar);
+}
+
+adjustMaxLength();
+window.addEventListener('resize', function() {
+  viewportWidth = window.innerWidth;
+  adjustMaxLength();
+  handleInputOverflow();
+});
+
+function handleInputOverflow() {
+  const maxLength = parseInt(taskBar.getAttribute('maxlength'));
+  if (taskBar.value.length > maxLength) {
+    taskBar.value = taskBar.value.slice(0, maxLength);
+  }
+}
+
 
 const placeholderList=['Buy an island...','Hike mountain Everest...','Get a gold medal...','Travel around the world...','Write a song...','Win a competition...','Go to space...','Help a friend...','Make a new friend...','Start a business...','Drink water...','Have a party...','Buy snacks...'];
 
@@ -207,7 +236,7 @@ function deleteTask(x){
 
 //BUTTON TRANSFORM FUNCTIONS
 
-let viewportWidth = window.innerWidth;
+console.log(viewportWidth);
 
 function addNewTransform(){
   activated=1;
@@ -260,7 +289,9 @@ addNewText.addEventListener('click', addNewTransform);
 
 taskBar.addEventListener('input', function() {
   if (taskBar.value.trim() !== '') {
-      addIcon.style.display='block';
+    addIcon.style.display='block';
+  }else{
+    addIcon.style.display='none';
   }
 });
 

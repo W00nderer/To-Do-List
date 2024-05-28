@@ -21,7 +21,6 @@ body{
 
 .blur{
   filter: blur(1px);
-  border: 2px solid white;
 }
 #canvas1 {
   width: 100%;

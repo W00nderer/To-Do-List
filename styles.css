@@ -193,6 +193,23 @@ h2{
   }
 }
 
+@keyframes completed-task-slide-in {
+  from{
+    transform: translateY(0);
+    opacity:0;
+    color:transparent;
+    margin-top: 0px;
+    font-size: 0.5rem;
+  }
+  to{
+    transform: translateY(-20px);
+    opacity:1;
+    color:rgba(255, 255, 255, 0.349);
+    margin-top: 10px;
+    font-size: 0.5rem;
+  }
+}
+
 @keyframes complete {
   from{
     color: white;
@@ -205,15 +222,6 @@ h2{
     margin-top: 10px;
     font-size: 0.5rem;
     color: rgba(255, 255, 255, 0.349);
-  }
-}
-
-@keyframes text-cross {
-  from{
-    text-decoration: none;
-  }
-  to{
-    text-decoration: line-through;
   }
 }
 

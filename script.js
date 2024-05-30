@@ -101,8 +101,7 @@ function moveSection(){
   }
 }
 
-//NEW TASK BAR (IN WORK)
-
+//NEW TASK BAR
 let viewportWidth = window.innerWidth;
 
 const addNewBar = document.getElementById("add-new");
@@ -151,40 +150,41 @@ placeholderChoose();
 
 let taskCount=0;
 
-function addTask(){
-  taskCount++;
+let taskArr = [];
 
-  const div=document.createElement('div');
-  div.className='new-task '+ taskCount;
-  div.setAttribute('id','div'+taskCount);
-  
-  const paragraph=document.createElement('p');
-  paragraph.innerText=taskBar.value;
-  paragraph.className='task-text '+ taskCount;
-  paragraph.setAttribute('id','p'+taskCount);
+window.onload = () => {
+  if (localStorage) {
+    if (localStorage.getItem('SavedTasks')) {
+      taskArr = (JSON.parse(localStorage.getItem('SavedTasks')));
+
+      taskArr.forEach(createTaskElement);
+    }
+  }
+}
+
+function createTaskElement(task){
+  taskCount = task.id;
+  const div = document.createElement('div');
+  div.className = 'new-task ' + task.id;
+  div.setAttribute('id', 'div' + task.id);
+
+  const paragraph = document.createElement('p');
+  paragraph.innerText = task.task;
+  paragraph.className = 'task-text ' + task.id;
+  paragraph.setAttribute('id', 'p' + task.id);
 
   const checkedBoxIcon = document.createElement('i');
-  checkedBoxIcon.className='fa-regular fa-square-check '+ taskCount;
-  checkedBoxIcon.setAttribute('id','square-check'+ taskCount);
-
+  checkedBoxIcon.className = 'fa-regular fa-square-check ' + task.id;
+  checkedBoxIcon.setAttribute('id', 'square-check' + task.id);
 
   const boxIcon = document.createElement('i');
-  boxIcon.className='fa-regular fa-square '+ taskCount;
-  boxIcon.setAttribute('id','square'+taskCount);
-  boxIcon.onclick = (function(count){
-    return function() {
-      completeTask(count);
-    };
-  })(taskCount);
+  boxIcon.className = 'fa-regular fa-square ' + task.id;
+  boxIcon.setAttribute('id', 'square' + task.id);
+  boxIcon.addEventListener('click', () => completeTask(task.id));
 
   const trashBin = document.createElement('i');
-  trashBin.className='fa-solid fa-trash fa-2xs ' + taskCount;
-  trashBin.onclick = (function(count) {
-    return function() {
-        deleteTask(count);
-    };
-  })(taskCount);
-
+  trashBin.className = 'fa-solid fa-trash fa-2xs ' + task.id;
+  trashBin.addEventListener('click', () => deleteTask(task.id));
 
   div.appendChild(checkedBoxIcon);
   div.appendChild(boxIcon);
@@ -192,12 +192,26 @@ function addTask(){
   div.appendChild(trashBin);
   taskList.appendChild(div);
 
+  if (task.status) {
+    div.style.animation = "completed-task-slide-in .4s ease-in-out forwards";
+    paragraph.style.textDecoration = 'line-through';
+    checkedBoxIcon.style.color = 'rgba(255, 255, 255, 0.349)';
+    checkedBoxIcon.style.transform = 'rotate(360deg)';
+    boxIcon.style.color = 'transparent';
+  } else {
+    div.style.animation = "task-slide-in .4s ease-in-out forwards";
+  }
+}
 
-  div.style.animation = "task-slide-in .4s ease-in-out forwards";
-  taskBar.value='';
+function addTask(){
+  taskCount++;
+  const task = { id: taskCount, task: taskBar.value, status: 0 };
+  taskArr.push(task);
+  localStorage.setItem('SavedTasks', JSON.stringify(taskArr));
+  createTaskElement(task);
+  taskBar.value = '';
   placeholderChoose();
-  addIcon.style.display='none';
-  
+  addIcon.style.display = 'none';
 }
 
 addIcon.addEventListener('click',addTask);
@@ -218,19 +232,34 @@ function completeTask(x){
   const justBox = document.getElementById('square' + x);
   if(completedTaskDiv){
     completedTaskDiv.style.animation= "complete .4s ease-in-out forwards";
-    completedTaskText.style.animation = "text-cross .4s ease-in-out forwards";
+    completedTaskText.style.textDecoration = 'line-through';
     checkBox.style.animation = "check-appear .4s ease-in-out forwards";
     justBox.style.animation = "box-disappear .4s ease-in-out forwards";
     console.log('Complete Task Function Called');
   }
+  let list = (JSON.parse(localStorage.getItem('SavedTasks')));
+  for (let item of list) {
+    if (item.id === x) {
+        item.status = 1;
+        break;
+    }
+  }
+  localStorage.setItem('SavedTasks', JSON.stringify(list));
 }
 
 //DELETE TASK
 
 function deleteTask(x){
   let deletingElement = document.getElementsByClassName(x)[0];
-  if(deletingElement){
+  if (deletingElement) {
     deletingElement.parentNode.removeChild(deletingElement);
+  }
+  let list = JSON.parse(localStorage.getItem('SavedTasks'));
+  const index = list.findIndex(item => item.id === x);
+  if (index !== -1) {
+    console.log(list);
+    list.splice(index, 1);
+    localStorage.setItem('SavedTasks', JSON.stringify(list));
   }
 }
 

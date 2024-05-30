@@ -151,6 +151,70 @@ placeholderChoose();
 
 let taskCount=0;
 
+// Array to hold saved tasks
+let taskArr = []
+
+// On window load, this function runs
+// This loads all existing tasks saved in localStorage
+window.onload = () => {
+  if (localStorage) {
+    // Checks if there is existed tasks saved
+    if (localStorage.getItem('SavedTasks')) {
+      // Sets the taskArr to the current saved tasks
+      taskArr = (JSON.parse(localStorage.getItem('SavedTasks')))
+
+      // Loops through all existing tasks
+      taskArr.forEach(task => {
+        // This does the same concept as the add task function
+        // The only difference is this is getting values from the existing saved tasks
+        // Hence the task.id and the task.task (the value in the task)
+        const div=document.createElement('div');
+        div.className='new-task '+ task.id;
+        div.setAttribute('id','div'+task.id);
+        
+        const paragraph=document.createElement('p');
+        paragraph.innerText=task.task;
+        paragraph.className='task-text '+ task.id;
+        paragraph.setAttribute('id','p'+ task.id);
+
+        const checkedBoxIcon = document.createElement('i');
+        checkedBoxIcon.className='fa-regular fa-square-check '+ task.id;
+        checkedBoxIcon.setAttribute('id','square-check'+ task.id);
+
+
+        const boxIcon = document.createElement('i');
+        boxIcon.className='fa-regular fa-square '+ task.id;
+        boxIcon.setAttribute('id','square'+task.id);
+        boxIcon.onclick = (function(count){
+          return function() {
+            completeTask(count);
+          };
+        })(task.id);
+
+        const trashBin = document.createElement('i');
+        trashBin.className='fa-solid fa-trash fa-2xs ' + task.id;
+        trashBin.onclick = (function(count) {
+          return function() {
+              deleteTask(count);
+          };
+        })(task.id);
+
+        div.style.animation = "task-slide-in .4s ease-in-out forwards";
+        div.appendChild(checkedBoxIcon);
+        div.appendChild(boxIcon);
+        div.appendChild(paragraph);
+        div.appendChild(trashBin);
+        taskList.appendChild(div);
+      })
+
+      // This sets the taskCount to the length of the existing array
+      // This is so the addTask() function will continue from a new id instead of overwriting the existing tasks with id
+      // This will prevent breaking your function and not delete/check the wrong task
+      taskCount = taskArr.length
+    }
+  }
+}
+
 function addTask(){
   taskCount++;
 
@@ -192,6 +256,11 @@ function addTask(){
   div.appendChild(trashBin);
   taskList.appendChild(div);
 
+  // Add each task to taskArr array
+  // Creates an object inside of the array with an id and task
+  taskArr.push({id: taskCount, task: paragraph.innerText})
+// Updates the saved localStorage array every new task added
+  localStorage.setItem('SavedTasks', JSON.stringify(taskArr))
 
   div.style.animation = "task-slide-in .4s ease-in-out forwards";
   taskBar.value='';
